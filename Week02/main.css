@@ -21,3 +21,13 @@ button.hover{
     color: red;
     cursor: pointer;
 }
+table{
+    table-layout: auto;
+    border-collapse: collapse;
+}
+th,td,tr{
+    border-color: black;
+}
+th:hover{
+    color: grey;
+}

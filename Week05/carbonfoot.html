@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f0f0f0; margin: 0; padding: 0; }
+        .container { padding: 20px; }
+        h1 { color: #333; }
+        .question { margin: 15px 0; }
+        label { font-size: 18px; color: #555; display: block; margin-bottom: 10px; }
+        .answers { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        input[type="radio"] { display: none; }
+        .answer-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .answer-btn:hover { background-color: #45a049; }
+        .answer-btn:checked + .answer-btn { background-color: #8bc34a; }
+        .answer-btn:focus { outline: none; }
+        .result { font-size: 20px; margin-top: 20px; font-weight: bold; }
+        .button-container { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Carbon Footprint Calculator</h1>
+        <form id="carbonForm">
+            <!-- Travel Question -->
+            <div class="question">
+                <label>How do you usually travel to work?</label>
+                <div class="answers">
+                    <input type="radio" id="car" name="transport" value="1">
+                    <label for="car" class="answer-btn">Car</label>
+                    
+                    <input type="radio" id="public" name="transport" value="0.5">
+                    <label for="public" class="answer-btn">Public Transport</label>
+                    
+                    <input type="radio" id="bike" name="transport" value="0.1">
+                    <label for="bike" class="answer-btn">Bicycle/Walk</label>
+                </div>
+            </div>
+
+            <!-- Energy Question -->
+            <div class="question">
+                <label>What is your energy source for home heating?</label>
+                <div class="answers">
+                    <input type="radio" id="gas" name="energy" value="1">
+                    <label for="gas" class="answer-btn">Gas/Electric Heating</label>
+                    
+                    <input type="radio" id="renewable" name="energy" value="0.5">
+                    <label for="renewable" class="answer-btn">Renewable Energy</label>
+                    
+                    <input type="radio" id="wood" name="energy" value="0.2">
+                    <label for="wood" class="answer-btn">Wood</label>
+                </div>
+            </div>
+
+            <!-- Waste Recycling Question -->
+            <div class="question">
+                <label>How much waste do you recycle?</label>
+                <div class="answers">
+                    <input type="radio" id="recycleA" name="waste" value="0.1">
+                    <label for="recycleA" class="answer-btn">Almost All</label>
+                    
+                    <input type="radio" id="recycleB" name="waste" value="0.5">
+                    <label for="recycleB" class="answer-btn">Some</label>
+                    
+                    <input type="radio" id="recycleC" name="waste" value="1">
+                    <label for="recycleC" class="answer-btn">None</label>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="button" onclick="calculateFootprint()" class="answer-btn">Calculate Footprint</button>
+            </div>
+        </form>
+
+        <div class="result">
+            <p>Your Estimated Carbon Footprint: <span id="footprintResult">0</span> kg CO₂ per year</p>
+        </div>
+    </div>
+
+    <script>
+        function calculateFootprint() {
+            const form = document.getElementById("carbonForm");
+            const transport = parseFloat(form["transport"].value);
+            const energy = parseFloat(form["energy"].value);
+            const waste = parseFloat(form["waste"].value);
+
+            const totalFootprint = (transport + energy + waste) * 1000; // Simplified for demo
+
+            document.getElementById("footprintResult").innerText = totalFootprint.toFixed(2);
+        }
+    </script>
+
+</body>
+</html>

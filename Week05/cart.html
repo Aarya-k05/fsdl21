@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart in ₹ Rupees</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        input { padding: 5px; margin: 5px; }
+        button { padding: 5px; }
+        ul { list-style: none; padding: 0; }
+    </style>
+</head>
+<body>
+
+    <h1>🛍 Shopping Cart (₹ Rupees)</h1>
+    <input type="text" id="product" placeholder="Product Name">
+    <input type="number" id="quantity" placeholder="Quantity">
+    <input type="number" id="price" placeholder="Price (₹)">
+    <button onclick="addToCart()">Add to Cart</button>
+
+    <h2>🛒 Your Cart</h2>
+    <ul id="cartList"></ul>
+    <h3 id="totalPrice">Total: ₹0</h3>
+
+    <script>
+        let cart = [];
+
+        function addToCart() {
+            let product = document.getElementById("product").value;
+            let quantity = parseInt(document.getElementById("quantity").value);
+            let price = parseFloat(document.getElementById("price").value);
+
+            if (!product || quantity <= 0 || price <= 0) {
+                alert("Please enter valid details");
+                return;
+            }
+
+            cart.push({ product, quantity, price });
+            updateCart();
+        }
+
+        function updateCart() {
+            let cartList = document.getElementById("cartList");
+            let total = 0;
+            cartList.innerHTML = "";
+
+            cart.forEach((item, index) => {
+                let listItem = document.createElement("li");
+                listItem.innerHTML = `${item.product} - ${item.quantity} x ₹${item.price.toFixed(2)} 
+                    <button onclick="removeItem(${index})">❌</button>`;
+                cartList.appendChild(listItem);
+                total += item.quantity * item.price;
+            });
+
+            document.getElementById("totalPrice").innerText = `Total: ₹${total.toFixed(2)}`;
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+    </script>
+
+</body>
+</html>

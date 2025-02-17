@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Ordering App</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #fafafa; text-align: center; padding: 20px; }
+        h1 { color: #333; }
+        input, select, button { padding: 10px; margin: 10px; width: 200px; border-radius: 5px; border: 1px solid #ccc; }
+        button { background-color: #4CAF50; color: white; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        #orderHistory { margin-top: 20px; text-align: left; }
+        .order-item { background-color: #f9f9f9; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ddd; }
+        .order-item p { margin: 0; }
+    </style>
+</head>
+<body>
+
+    <h1>🍔 Food Ordering App</h1>
+
+    <form id="foodOrderForm">
+        <input type="text" id="name" placeholder="Your Name" required><br>
+        <input type="text" id="address" placeholder="Your Address" required><br>
+        
+        <select id="menu" required>
+            <option value="">Select an Item</option>
+            <option value="Pizza - 200">Pizza - ₹200</option>
+            <option value="Burger - 150">Burger - ₹150</option>
+            <option value="Pasta - 180">Pasta - ₹180</option>
+            <option value="Salad - 120">Salad - ₹120</option>
+        </select><br>
+
+        <button type="button" onclick="placeOrder()">Place Order</button>
+    </form>
+
+    <h2>Your Order History</h2>
+    <div id="orderHistory"></div>
+    
+    <script>
+        let orderHistory = [];
+
+        function placeOrder() {
+            const name = document.getElementById("name").value;
+            const address = document.getElementById("address").value;
+            const menuItem = document.getElementById("menu").value;
+
+            if (!name || !address || !menuItem) {
+                alert("Please fill all fields.");
+                return;
+            }
+
+            const itemPrice = parseInt(menuItem.split('-')[1].trim());
+            const order = {
+                name,
+                address,
+                menuItem,
+                totalPrice: itemPrice
+            };
+
+            orderHistory.push(order);
+            displayOrderHistory();
+            alert(`${menuItem} has been added to your order. Total Price: ₹${itemPrice}`);
+            document.getElementById("foodOrderForm").reset(); // Reset the form
+        }
+
+        function displayOrderHistory() {
+            const orderHistoryDiv = document.getElementById("orderHistory");
+            orderHistoryDiv.innerHTML = ""; // Clear current history
+
+            orderHistory.forEach(order => {
+                const orderElement = document.createElement("div");
+                orderElement.classList.add("order-item");
+                orderElement.innerHTML = `
+                    <p><strong>Name:</strong> ${order.name}</p>
+                    <p><strong>Address:</strong> ${order.address}</p>
+                    <p><strong>Order:</strong> ${order.menuItem}</p>
+                    <p><strong>Total Price:</strong> ₹${order.totalPrice}</p>
+                `;
+                orderHistoryDiv.appendChild(orderElement);
+            });
+        }
+    </script>
+
+</body>
+</html>

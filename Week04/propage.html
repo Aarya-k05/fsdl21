@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Age Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input {
+            padding: 8px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #result {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Advanced Age Calculator</h2>
+    <label for="birthDate">Enter Birth Date:</label>
+    <input type="date" id="birthDate">
+    <button onclick="calculateAge()">Calculate</button>
+    <p id="result"></p>
+
+    <script>
+        function calculateAge() {
+            let birthDate = new Date(document.getElementById("birthDate").value);
+            let today = new Date();
+
+            if (!birthDate || birthDate > today) {
+                document.getElementById("result").innerText = "❌ Enter a valid birth date!";
+                return;
+            }
+
+            let birthYear = birthDate.getFullYear();
+            let birthMonth = birthDate.getMonth() + 1; // Months are 0-based in JS
+            let birthDay = birthDate.getDate();
+
+            let currentYear = today.getFullYear();
+            let currentMonth = today.getMonth() + 1;
+            let currentDay = today.getDate();
+
+            let ageYears = currentYear - birthYear;
+            let ageMonths = currentMonth - birthMonth;
+            let ageDays = currentDay - birthDay;
+
+            // Adjust for negative months
+            if (ageMonths < 0) {
+                ageYears--;
+                ageMonths += 12;
+            }
+
+            // Adjust for negative days
+            if (ageDays < 0) {
+                let lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+                ageDays += lastMonth.getDate();
+                ageMonths--;
+            }
+
+            document.getElementById("result").innerText = `🎉 You are ${ageYears} years, ${ageMonths} months, and ${ageDays} days old!`;
+        }
+    </script>
+
+</body>
+</html>

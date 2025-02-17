@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management App</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f0f0; text-align: center; padding: 20px; }
+        h1 { color: #333; }
+        input, select, button { padding: 10px; margin: 10px; width: 200px; border-radius: 5px; border: 1px solid #ccc; }
+        button { background-color: #4CAF50; color: white; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        #taskList { margin-top: 20px; text-align: left; }
+        .task-item { background-color: #fff; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ddd; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+
+    <h1>📝 Task Management App</h1>
+
+    <form id="taskForm">
+        <input type="text" id="taskName" placeholder="Task Name" required><br>
+        <input type="date" id="taskDeadline" required><br>
+        <select id="taskStatus" required>
+            <option value="">Select Status</option>
+            <option value="Incomplete">Incomplete</option>
+            <option value="Completed">Completed</option>
+        </select><br>
+
+        <button type="button" onclick="addTask()">Add Task</button>
+    </form>
+
+    <p id="errorMessage" class="error"></p>
+
+    <h2>Your Task List</h2>
+    <div id="taskList"></div>
+    
+    <script>
+        let taskList = [];
+
+        function addTask() {
+            // Reset error message
+            document.getElementById("errorMessage").innerText = '';
+
+            // Get form values
+            const taskName = document.getElementById("taskName").value.trim();
+            const taskDeadline = document.getElementById("taskDeadline").value;
+            const taskStatus = document.getElementById("taskStatus").value;
+
+            // Error handling and validation
+            if (!taskName || !taskDeadline || !taskStatus) {
+                document.getElementById("errorMessage").innerText = "Please fill all fields correctly.";
+                return;
+            }
+
+            // Ensure valid task status
+            if (taskStatus !== "Incomplete" && taskStatus !== "Completed") {
+                document.getElementById("errorMessage").innerText = "Invalid task status.";
+                return;
+            }
+
+            // Create task object with a timestamp
+            const task = {
+                taskName,
+                taskDeadline,
+                taskStatus,
+                createdDate: new Date().toLocaleString() // Store current date and time
+            };
+
+            // Push task to task list array
+            taskList.push(task);
+
+            // Display task list
+            displayTaskList();
+
+            // Clear the form
+            document.getElementById("taskForm").reset();
+        }
+
+        function displayTaskList() {
+            const taskListDiv = document.getElementById("taskList");
+            taskListDiv.innerHTML = ""; // Clear current task list
+
+            taskList.forEach(task => {
+                const taskElement = document.createElement("div");
+                taskElement.classList.add("task-item");
+                taskElement.innerHTML = `
+                    <p><strong>Task Name:</strong> ${task.taskName}</p>
+                    <p><strong>Deadline:</strong> ${task.taskDeadline}</p>
+                    <p><strong>Status:</strong> ${task.taskStatus}</p>
+                    <p><strong>Created On:</strong> ${task.createdDate}</p>
+                `;
+                taskListDiv.appendChild(taskElement);
+            });
+        }
+    </script>
+
+</body>
+</html>

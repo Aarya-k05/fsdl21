@@ -13,6 +13,7 @@
         #orderHistory { margin-top: 20px; text-align: left; }
         .order-item { background-color: #f9f9f9; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ddd; }
         .order-item p { margin: 0; }
+        .error { color: red; }
     </style>
 </head>
 <body>
@@ -34,6 +35,8 @@
         <button type="button" onclick="placeOrder()">Place Order</button>
     </form>
 
+    <p id="errorMessage" class="error"></p>
+
     <h2>Your Order History</h2>
     <div id="orderHistory"></div>
     
@@ -41,27 +44,47 @@
         let orderHistory = [];
 
         function placeOrder() {
-            const name = document.getElementById("name").value;
-            const address = document.getElementById("address").value;
+            // Reset error message
+            document.getElementById("errorMessage").innerText = '';
+
+            // Get form values
+            const name = document.getElementById("name").value.trim();
+            const address = document.getElementById("address").value.trim();
             const menuItem = document.getElementById("menu").value;
 
+            // Error handling and validation
             if (!name || !address || !menuItem) {
-                alert("Please fill all fields.");
+                document.getElementById("errorMessage").innerText = "Please fill all fields correctly.";
                 return;
             }
 
-            const itemPrice = parseInt(menuItem.split('-')[1].trim());
+            // Extract item name and price
+            const itemDetails = menuItem.split('-');
+            const itemName = itemDetails[0].trim();
+            const itemPrice = parseInt(itemDetails[1].trim());
+
+            if (isNaN(itemPrice)) {
+                document.getElementById("errorMessage").innerText = "Invalid price value.";
+                return;
+            }
+
+            // Create order object with a timestamp
             const order = {
                 name,
                 address,
-                menuItem,
-                totalPrice: itemPrice
+                itemName,
+                totalPrice: itemPrice,
+                orderDate: new Date().toLocaleString() // Store current date and time
             };
 
+            // Push order to history array
             orderHistory.push(order);
+
+            // Display order history
             displayOrderHistory();
-            alert(`${menuItem} has been added to your order. Total Price: ₹${itemPrice}`);
-            document.getElementById("foodOrderForm").reset(); // Reset the form
+
+            // Clear the form
+            document.getElementById("foodOrderForm").reset();
         }
 
         function displayOrderHistory() {
@@ -74,8 +97,9 @@
                 orderElement.innerHTML = `
                     <p><strong>Name:</strong> ${order.name}</p>
                     <p><strong>Address:</strong> ${order.address}</p>
-                    <p><strong>Order:</strong> ${order.menuItem}</p>
+                    <p><strong>Order:</strong> ${order.itemName}</p>
                     <p><strong>Total Price:</strong> ₹${order.totalPrice}</p>
+                    <p><strong>Order Date:</strong> ${order.orderDate}</p>
                 `;
                 orderHistoryDiv.appendChild(orderElement);
             });

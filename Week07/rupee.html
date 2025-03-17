@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngularJS Currency Converter</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
+        .container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .input-group { display: flex; align-items: center; justify-content: center; }
+        .currency-symbol { font-size: 18px; margin-right: 8px; font-weight: bold; }
+        input, select { padding: 8px; margin: 5px; text-align: center; }
+        .result { margin-top: 10px; font-size: 18px; font-weight: bold; }
+    </style>
+</head>
+<body ng-app="currencyApp" ng-controller="CurrencyController">
+
+    <div class="container">
+        <h2>Currency Converter 💱</h2>
+
+        <div class="input-group">
+            <span class="currency-symbol">$</span>
+            <input type="number" ng-model="amount" placeholder="Enter amount" />
+        </div>
+
+        <select ng-model="selectedCurrency" ng-options="currency.symbol as currency.name for currency in exchangeRates"></select>
+
+        <div class="result">
+            Converted Amount: <span>{{ (amount * exchangeRates[selectedCurrency].rate) | number:2 }} {{ selectedCurrency }}</span>
+        </div>
+    </div>
+
+    <script>
+        var app = angular.module('currencyApp', []);
+        app.controller('CurrencyController', function ($scope) {
+            $scope.amount = 1;
+            $scope.exchangeRates = {
+                "INR": { name: "Indian Rupee (INR)", rate: 83, symbol: "INR" },
+                "EUR": { name: "Euro (EUR)", rate: 0.91, symbol: "EUR" },
+                "GBP": { name: "British Pound (GBP)", rate: 0.78, symbol: "GBP" },
+                "JPY": { name: "Japanese Yen (JPY)", rate: 150, symbol: "JPY" }
+            };
+            $scope.selectedCurrency = "INR"; // Default currency
+        });
+    </script>
+
+</body>
+</html>

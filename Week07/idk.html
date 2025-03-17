@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngularJS To-Do List</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
+        .container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        input, button { padding: 8px; margin: 5px; }
+        ul { list-style: none; padding: 0; }
+        li { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 8px; 
+            border-bottom: 1px solid #ddd; 
+        }
+        .done { text-decoration: line-through; color: gray; }
+        .delete-btn { background-color: red; color: white; border: none; padding: 5px; cursor: pointer; }
+    </style>
+</head>
+<body ng-app="todoApp" ng-controller="TodoController">
+
+    <div class="container">
+        <h2>✅ To-Do List</h2>
+
+        <input type="text" ng-model="newTask" placeholder="Add a task..." />
+        <button ng-click="addTask()">➕ Add</button>
+
+        <ul>
+            <li ng-repeat="task in tasks">
+                <span ng-class="{done: task.done}" ng-click="toggleDone(task)">{{ task.text }}</span>
+                <button class="delete-btn" ng-click="removeTask($index)">❌</button>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        var app = angular.module('todoApp', []);
+        app.controller('TodoController', function ($scope) {
+            // Load tasks from Local Storage
+            $scope.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+            // Add a new task
+            $scope.addTask = function () {
+                if ($scope.newTask.trim() !== "") {
+                    $scope.tasks.push({ text: $scope.newTask, done: false });
+                    $scope.newTask = "";
+                    $scope.saveTasks();
+                }
+            };
+
+            // Mark task as done
+            $scope.toggleDone = function (task) {
+                task.done = !task.done;
+                $scope.saveTasks();
+            };
+
+            // Remove a task
+            $scope.removeTask = function (index) {
+                $scope.tasks.splice(index, 1);
+                $scope.saveTasks();
+            };
+
+            // Save tasks to Local Storage
+            $scope.saveTasks = function () {
+                localStorage.setItem('tasks', JSON.stringify($scope.tasks));
+            };
+        });
+    </script>
+
+</body>
+</html>

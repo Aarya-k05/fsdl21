@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Validation</title>
+</head>
+<body>
+    <script>
+        function validateEmail(email) {
+            // Regular expression for basic email validation
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailPattern.test(email);
+        }
+
+        function getEmailInput() {
+            const email = prompt("Enter your email:");
+            
+            if (!email) {
+                alert("Email cannot be empty.");
+                return;
+            }
+            
+            if (validateEmail(email)) {
+                alert("Valid email address!");
+            } else {
+                alert("Invalid email address. Please enter a valid one.");
+            }
+        }
+
+        // Run the function to get email input and validate
+        getEmailInput();
+    </script>
+</body>
+</html>
